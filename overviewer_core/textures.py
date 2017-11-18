@@ -984,7 +984,210 @@ def wooden_planks(self, blockid, data):
         return self.build_block(self.load_image_texture("assets/minecraft/textures/blocks/planks_acacia.png"),self.load_image_texture("assets/minecraft/textures/blocks/planks_acacia.png"))
     if data == 5: # dark oak
         return self.build_block(self.load_image_texture("assets/minecraft/textures/blocks/planks_big_oak.png"),self.load_image_texture("assets/minecraft/textures/blocks/planks_big_oak.png"))
-
+		
+@material(blockid=331, data=range(4095), solid=True)
+def icte(self, blockid, data):
+    itop = None
+    mid = data >> 4
+    active = data & 0b1
+    facing = (data >> 1) & 0b111
+    if mid == 1:
+        if active == 1:
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/generator_front_active.png")
+        else:
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/generator_front.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/generator_top.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/generator_leftrightback.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/generator_leftrightback.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/generator_leftrightback.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/generator_bottom.png")
+    if mid == 2:
+        if active == 1:
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/geo_generator_front_active.png")
+        else:
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/geo_generator_front.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/geo_generator_top.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/geo_generator_leftrightback.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/geo_generator_leftrightback.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/geo_generator_leftrightback.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/geo_generator_bottom.png")
+    if mid == 3:
+        if active == 1:
+            iback = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/kinetic_generator_back_active.png")
+        else:
+            iback = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/kinetic_generator_back.png")
+        ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/kinetic_generator_front.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/kinetic_generator_top.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/kinetic_generator_leftright.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/kinetic_generator_leftright.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/kinetic_generator_bottom.png")
+    if mid == 4:
+        if active == 1:
+            itop = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/rt_generator_top_active.png")
+        else:
+            itop = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/rt_generator_top.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/rt_generator_sides.png")
+        ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/rt_generator_sides.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/rt_generator_sides.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/rt_generator_sides.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/rt_generator_bottom.png")
+    if mid == 5:
+        if active == 1:
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/semifluid_generator_front_active.png")
+        else:
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/semifluid_generator_front.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/semifluid_generator_top.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/semifluid_generator_leftright.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/semifluid_generator_leftright.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/semifluid_generator_back.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/semifluid_generator_bottom.png")
+    if mid == 6:
+        itop = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/solar_generator_top.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/solar_generator_sides.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/solar_generator_sides.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/solar_generator_sides.png")
+        ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/solar_generator_sides.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/solar_generator_bottom.png")
+    if mid == 7:
+        if active == 1:
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/stirling_generator_front_active.png")
+        else:
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/stirling_generator_front.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/stirling_generator_top.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/stirling_generator_leftright.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/stirling_generator_leftright.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/stirling_generator_back.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/stirling_generator_bottom.png")
+    if mid == 8:
+        ifront = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/water_generator_front.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/water_generator_top.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/water_generator_left.png") 
+        iright = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/water_generator_right.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/water_generator_back.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/generator/electric/water_generator_bottom.png")
+    if mid == 9:
+        ifront = self.load_image_texture("assets/ic2/textures/blocks/wiring/storage/batbox_front.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/wiring/storage/batbox_top.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/wiring/storage/batbox_leftright.png") 
+        iright = self.load_image_texture("assets/ic2/textures/blocks/wiring/storage/batbox_leftright.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/wiring/storage/batbox_back.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/wiring/storage/batbox_bottom.png")
+    if mid == 10:
+        if active == 1:
+            itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_top_active.png")
+            iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_sides_active.png")
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_sides_active.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_sides_active.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_sides_active.png")
+        else:
+            itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_top.png")
+            iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_sides.png")
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_sides.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_sides.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_sides.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/teleporter_bottom.png")
+    if mid == 11:
+        return self.build_full_block(self.load_image_texture("assets/ic2/textures/blocks/machine/misc/sorting_machine_top.png"), None, None, self.load_image_texture("assets/ic2/textures/blocks/machine/misc/sorting_machine_right.png"), self.load_image_texture("assets/ic2/textures/blocks/machine/misc/sorting_machine_back.png"));
+    if mid == 35:
+        iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_back.png")
+        if active == 1:
+            ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides_active.png")
+            itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides_active.png")
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides_active.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides_active.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides_active.png")
+        else:
+            ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides.png")
+            itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides.png")
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_lzh_sides.png")
+    if mid == 36:
+        iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_back.png")
+        if active == 1:
+            ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides_active.png")
+            itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides_active.png")
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides_active.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides_active.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides_active.png")
+        else:
+            ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides.png")
+            itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides.png")
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/rci_rsh_sides.png")
+    if mid == 40:
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_bottom.png")
+        if active == 1:
+            itop = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_top_active.png")
+            iback = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_back_active.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_left_active.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_right_active.png")
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_front_active.png")
+        else:
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_frontback.png")
+            itop = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_top.png")
+            iback = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_frontback.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_leftright.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/fluid/condenser_leftright.png")
+    if mid == 41:
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/tesla_coil_bottomtop.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/tesla_coil_bottomtop.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/tesla_coil_sides.png")
+        ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/tesla_coil_sides.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/tesla_coil_sides.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/tesla_coil_sides.png")
+    if mid == 44:
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/magnetizer_bottomtop.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/magnetizer_bottomtop.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/magnetizer_leftrightback.png")
+        ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/magnetizer_front.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/magnetizer_leftrightback.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/magnetizer_leftrightback.png")
+    if mid == 47:
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_bottomtop.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_bottomtop.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_frontback.png")
+        ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_frontback.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_left.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_right.png")
+    if mid == 80:
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_2.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_2.png")
+        iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_2.png")
+        ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_2.png")
+        ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_2.png")
+        iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/item_buffer_2.png")
+    if mid == 85:
+        if active == 1:
+            iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_sides_active.png")
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_sides_active.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_sides_active.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_sides_active.png")
+        else:
+            iback = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_sides.png")
+            ifront = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_sides.png")
+            ileft = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_sides.png")
+            iright = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_sides.png")
+        itop = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_top.png")
+        ibottom = self.load_image_texture("assets/ic2/textures/blocks/machine/misc/terraformer_bottom.png")
+    
+    if itop is None:
+        return None
+    if facing == 0:
+        return self.build_full_block(iback, None, None, iright.rotate(90), ibottom);
+    if facing == 1:
+        return self.build_full_block(ifront.rotate(180), None, None, iright.rotate(270), itop);
+    if facing == 2:
+        return self.build_full_block(itop, None, None, iright, iback);
+    if facing == 3:
+        return self.build_full_block(itop, None, None, ileft, ifront);
+    if facing == 4:
+        return self.build_full_block(itop.rotate(90), None, None, ifront, iright);
+    if facing == 5:
+        return self.build_full_block(itop.rotate(270), None, None, iback, ileft);
+    return None
+	
 @material(blockid=6, data=range(16), transparent=True)
 def saplings(self, blockid, data):
     # usual saplings

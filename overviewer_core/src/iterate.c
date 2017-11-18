@@ -131,6 +131,8 @@ int load_chunk(RenderState* state, int x, int z, unsigned char required) {
     
     /* set up reasonable defaults */
     dest->biomes = NULL;
+	dest->tileEntities = NULL;
+	
     for (i = 0; i < SECTIONS_PER_CHUNK; i++)
     {
         dest->sections[i].blocks = NULL;
@@ -165,7 +167,9 @@ int load_chunk(RenderState* state, int x, int z, unsigned char required) {
         }
         return 1;
     }
-    
+    dest->tileEntities = PyDict_GetItemString(chunk, "TileEntities");
+    Py_INCREF(dest->tileEntities);
+
     dest->biomes = (PyArrayObject*) PyDict_GetItemString(chunk, "Biomes");
     Py_INCREF(dest->biomes);
     
@@ -195,6 +199,7 @@ unload_all_chunks(RenderState *state) {
         for (j = 0; j < 3; j++) {
             if (state->chunks[i][j].loaded) {
                 Py_XDECREF(state->chunks[i][j].biomes);
+                Py_XDECREF(state->chunks[i][j].tileEntities);
                 for (k = 0; k < SECTIONS_PER_CHUNK; k++) {
                     Py_XDECREF(state->chunks[i][j].sections[k].blocks);
                     Py_XDECREF(state->chunks[i][j].sections[k].data);
@@ -573,6 +578,154 @@ generate_pseudo_data(RenderState *state, unsigned short ancilData) {
     return 0;
 }
 
+static inline unsigned short ic2_data(unsigned char id, long facing, long active) {
+    return ((id & 0xff) << 4) | ((facing & 0x7) << 1) | (active & 0x1);
+}
+
+static inline unsigned short poscmp(RenderState *state, long x, long y, long z) {
+    return x == (state->chunkx*16 + state->x) && y == (state->chunky*16 + state->y) && z == (state->chunkz*16 + state->z);
+}
+
+static inline int ic2_block(const char* name, const char* id, unsigned char number, PyObject* row, RenderState* state, unsigned short* ancilData) {
+    if (!strcmp(name, id)) {
+        PyObject *temp = NULL;
+        long active = 0;
+        long facing = 3;
+
+        temp = PyDict_GetItemString(row, "active");
+
+        if (temp) {
+            active = PyInt_AS_LONG(temp);
+        } else {                                
+            printf("No active: %s\n", id);
+        }
+
+        temp = PyDict_GetItemString(row, "facing");
+
+        if (temp) {
+            facing = PyInt_AS_LONG(temp);
+        } else {
+            printf("No Facing %s\n", id);
+        }
+        
+        *ancilData = state->block_pdata = ic2_data(number, facing, active);
+        state->block_data = number;
+        return 1;
+    }
+    return 0;
+}
+
+static void prepare_mods_blocks(RenderState *state, unsigned short *ancilData) {
+    if (state->block == 331) {					
+        if (state->chunks[1][1].tileEntities) {
+            PyObject *list = state->chunks[1][1].tileEntities;
+            int i;
+            const char* id = NULL;
+            for (i = 0; i < PyObject_Length(list); i++) {
+                PyObject* row = PyList_GET_ITEM(list, i);
+                long x = PyInt_AS_LONG(PyDict_GetItemString(row, "x"));
+                long y = PyInt_AS_LONG(PyDict_GetItemString(row, "y"));
+                long z = PyInt_AS_LONG(PyDict_GetItemString(row, "z"));
+                
+                if (poscmp(state, x, y, z)){
+                    const char* id = PyString_AsString(PyDict_GetItemString(row, "id"));
+                    if (ic2_block("ic2:generator", id, 1, row, state, ancilData)) break;
+                    if (ic2_block("ic2:geo_generator", id, 2, row, state, ancilData)) break;
+                    if (ic2_block("ic2:kinetic_generator", id, 3, row, state, ancilData)) break;
+                    if (ic2_block("ic2:rt_generator", id, 4, row, state, ancilData)) break;
+                    if (ic2_block("ic2:semifluid_generator", id, 5, row, state, ancilData)) break;
+                    if (ic2_block("ic2:solar_generator", id, 6, row, state, ancilData)) break;
+                    if (ic2_block("ic2:stirling_generator", id, 7, row, state, ancilData)) break;
+                    if (ic2_block("ic2:water_generator", id, 8, row, state, ancilData)) break;
+                    if (ic2_block("ic2:batbox", id, 9, row, state, ancilData)) break;
+                    if (ic2_block("ic2:teleporter", id, 10, row, state, ancilData)) break;
+                    if (ic2_block("ic2:sorting_machine", id, 11, row, state, ancilData)) break;
+                    if (ic2_block("ic2:blast_furnace", id, 12, row, state, ancilData)) break;
+                    if (ic2_block("ic2:miner", id, 13, row, state, ancilData)) break;
+                    if (ic2_block("ic2:chargepad_mfe", id, 14, row, state, ancilData)) break;
+                    if (ic2_block("ic2:ev_transformer", id, 15, row, state, ancilData)) break;
+                    if (ic2_block("ic2:weighted_fluid_distributor", id, 16, row, state, ancilData)) break;
+                    if (ic2_block("ic2:solid_canner", id, 17, row, state, ancilData)) break;
+                    if (ic2_block("ic2:cropmatron", id, 18, row, state, ancilData)) break;
+                    if (ic2_block("ic2:chargepad_cesu", id, 19, row, state, ancilData)) break;
+                    if (ic2_block("ic2:hv_transformer", id, 20, row, state, ancilData)) break;
+                    if (ic2_block("ic2:batch_crafter", id, 21, row, state, ancilData)) break;
+                    if (ic2_block("ic2:recycler", id, 22, row, state, ancilData)) break;
+                    if (ic2_block("ic2:crop_harvester", id, 23, row, state, ancilData)) break;
+                    if (ic2_block("ic2:chargepad_batbox", id, 24, row, state, ancilData)) break;
+                    if (ic2_block("ic2:mv_transformer", id, 25, row, state, ancilData)) break;
+                    if (ic2_block("ic2:industrial_workbench", id, 26, row, state, ancilData)) break;
+                    if (ic2_block("ic2:advanced_miner", id, 27, row, state, ancilData)) break;
+                    if (ic2_block("ic2:trade_o_mat", id, 28, row, state, ancilData)) break;
+                    if (ic2_block("ic2:lv_transformer", id, 29, row, state, ancilData)) break;
+                    if (ic2_block("ic2:steam_repressurizer", id, 30, row, state, ancilData)) break;
+                    if (ic2_block("ic2:personal_chest", id, 31, row, state, ancilData)) break;
+                    if (ic2_block("ic2:electrolyzer", id, 32, row, state, ancilData)) break;
+                    if (ic2_block("ic2:creative_generator", id, 33, row, state, ancilData)) break;
+                    if (ic2_block("ic2:mfsu", id, 34, row, state, ancilData)) break;
+                    if (ic2_block("ic2:rci_lzh", id, 35, row, state, ancilData)) break;
+                    if (ic2_block("ic2:rci_rsh", id, 36, row, state, ancilData)) break;
+                    if (ic2_block("ic2:steam_kinetic_generator", id, 37, row, state, ancilData)) break;
+                    if (ic2_block("ic2:fluid_bottler", id, 38, row, state, ancilData)) break;
+                    if (ic2_block("ic2:manual_kinetic_generator", id, 39, row, state, ancilData)) break;
+                    if (ic2_block("ic2:condenser", id, 40, row, state, ancilData)) break;
+                    if (ic2_block("ic2:tesla_coil", id, 41, row, state, ancilData)) break;
+                    if (ic2_block("ic2:electric_kinetic_generator", id, 42, row, state, ancilData)) break;
+                    if (ic2_block("ic2:reactor_redstone_port", id, 43, row, state, ancilData)) break;
+                    if (ic2_block("ic2:magnetizer", id, 44, row, state, ancilData)) break;
+                    if (ic2_block("ic2:solid_heat_generator", id, 45, row, state, ancilData)) break;
+                    if (ic2_block("ic2:reactor_fluid_port", id, 46, row, state, ancilData)) break;
+                    if (ic2_block("ic2:item_buffer", id, 47, row, state, ancilData)) break;
+                    if (ic2_block("ic2:rt_heat_generator", id, 48, row, state, ancilData)) break;
+                    if (ic2_block("ic2:nuclear_reactor", id, 49, row, state, ancilData)) break;
+                    if (ic2_block("ic2:reactor_chamber", id, 50, row, state, ancilData)) break;
+                    if (ic2_block("ic2:steam_generator", id, 51, row, state, ancilData)) break;
+                    if (ic2_block("ic2:fluid_heat_generator", id, 52, row, state, ancilData)) break;
+                    if (ic2_block("ic2:reactor_access_hatch", id, 53, row, state, ancilData)) break;
+                    if (ic2_block("ic2:solar_distiller", id, 54, row, state, ancilData)) break;
+                    if (ic2_block("ic2:electric_heat_generator", id, 55, row, state, ancilData)) break;
+                    if (ic2_block("ic2:pump", id, 56, row, state, ancilData)) break;
+                    if (ic2_block("ic2:wind_generator", id, 57, row, state, ancilData)) break;
+                    if (ic2_block("ic2:wind_kinetic_generator", id, 58, row, state, ancilData)) break;
+                    if (ic2_block("ic2:liquid_heat_exchanger", id, 59, row, state, ancilData)) break;
+                    if (ic2_block("ic2:nuke", id, 60, row, state, ancilData)) break;
+                    if (ic2_block("ic2:water_kinetic_generator", id, 61, row, state, ancilData)) break;
+                    if (ic2_block("ic2:fluid_regulator", id, 62, row, state, ancilData)) break;
+                    if (ic2_block("ic2:itnt", id, 63, row, state, ancilData)) break;
+                    if (ic2_block("ic2:stirling_kinetic_generator", id, 64, row, state, ancilData)) break;
+                    if (ic2_block("ic2:fluid_distributor", id, 65, row, state, ancilData)) break;
+                    if (ic2_block("ic2:macerator", id, 66, row, state, ancilData)) break;
+                    if (ic2_block("ic2:iron_furnace", id, 67, row, state, ancilData)) break;
+                    if (ic2_block("ic2:ore_washing_plant", id, 68, row, state, ancilData)) break;
+                    if (ic2_block("ic2:extractor", id, 69, row, state, ancilData)) break;
+                    if (ic2_block("ic2:metal_former", id, 70, row, state, ancilData)) break;
+                    if (ic2_block("ic2:energy_o_mat", id, 71, row, state, ancilData)) break;
+                    if (ic2_block("ic2:electric_furnace", id, 72, row, state, ancilData)) break;
+                    if (ic2_block("ic2:induction_furnace", id, 73, row, state, ancilData)) break;
+                    if (ic2_block("ic2:scanner", id, 74, row, state, ancilData)) break;
+                    if (ic2_block("ic2:mfe", id, 75, row, state, ancilData)) break;
+                    if (ic2_block("ic2:compressor", id, 76, row, state, ancilData)) break;
+                    if (ic2_block("ic2:fermenter", id, 77, row, state, ancilData)) break;
+                    if (ic2_block("ic2:replicator", id, 78, row, state, ancilData)) break;
+                    if (ic2_block("ic2:cesu", id, 79, row, state, ancilData)) break;
+                    if (ic2_block("ic2:item_buffer_2", id, 80, row, state, ancilData)) break;
+                    if (ic2_block("ic2:canner", id, 81, row, state, ancilData)) break;
+                    if (ic2_block("ic2:centrifuge", id, 82, row, state, ancilData)) break;
+                    if (ic2_block("ic2:pattern_storage", id, 83, row, state, ancilData)) break;
+                    if (ic2_block("ic2:chunk_loader", id, 84, row, state, ancilData)) break;
+                    if (ic2_block("ic2:terraformer", id, 85, row, state, ancilData)) break;
+                    if (ic2_block("ic2:block_cutter", id, 86, row, state, ancilData)) break;
+                    if (ic2_block("ic2:matter_generator", id, 87, row, state, ancilData)) break;
+                    if (ic2_block("ic2:chargepad_mfsu", id, 88, row, state, ancilData)) break;
+                    if (ic2_block("ic2:tank", id, 89, row, state, ancilData)) break;
+                    if (ic2_block("ic2:weighted_item_distributor", id, 90, row, state, ancilData)) break;
+                    printf("Unknown: %s\n", id);
+                    break;
+                }
+            }
+        }
+    }
+}
 
 /* TODO triple check this to make sure reference counting is correct */
 PyObject*
@@ -732,6 +885,8 @@ chunk_render(PyObject *self, PyObject *args) {
                         state.block_pdata = 0;
                     }
                 }
+                
+                prepare_mods_blocks(&state, &ancilData);
                 
                 /* make sure our block info is in-bounds */
                 if (state.block >= max_blockid || ancilData >= max_data)

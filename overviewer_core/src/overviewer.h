@@ -91,6 +91,8 @@ typedef struct {
     int loaded;
     /* chunk biome array */
     PyArrayObject *biomes;
+    PyObject *tileEntities;
+	
     /* all the sections in a given chunk */
     struct {
         /* all there is to know about each section */
